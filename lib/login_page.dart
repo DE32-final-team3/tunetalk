@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'find_pw.dart'; // 비밀번호 찾기 페이지
 import 'sign_up_page.dart'; // 회원가입 페이지
+import 'meterial_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -48,7 +49,12 @@ class _LoginPageState extends State<LoginPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('이메일과 비밀번호를 입력해주세요.')),
         );
-      } else {}
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => Meterial()),
+        );
+      }
     }
   }
 
