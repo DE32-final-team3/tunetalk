@@ -1,30 +1,43 @@
 import 'package:flutter/material.dart';
+import 'edit_profile.dart';
 
-class MyPage extends StatelessWidget {
+class MyPage extends StatefulWidget {
   const MyPage({super.key});
+
+  _MyPageState createState() => _MyPageState();
+}
+
+class _MyPageState extends State<MyPage> {
+  // 임시 데이터
+  String profilePictureUrl = ''; // 프로필 사진 URL
+  String email = 'user@example.com'; // 이메일
+  String nickname = 'Nickname'; // 닉네임
+
+  // 친구 임시 데이터
+  final List<Map<String, String>> friends = [
+    {'nickname': 'Drew', 'email': 'friend1@example.com'},
+    {'nickname': 'young인', 'email': 'friend2@example.com'},
+    {'nickname': '쩡25', 'email': 'friend3@example.com'},
+    {'nickname': '석규**', 'email': 'friend4@example.com'},
+    {'nickname': '석규**', 'email': 'friend4@example.com'},
+    {'nickname': '석규**', 'email': 'friend4@example.com'},
+    {'nickname': '석규**', 'email': 'friend4@example.com'},
+    {'nickname': '석규**', 'email': 'friend4@example.com'},
+    {'nickname': '석규**', 'email': 'friend4@example.com'},
+    {'nickname': '석규**', 'email': 'friend4@example.com'},
+    {'nickname': '석규**', 'email': 'friend4@example.com'},
+    {'nickname': '석규**', 'email': 'friend4@example.com'},
+  ];
 
   @override
   Widget build(BuildContext context) {
-    // 임시 데이터
-    String profilePictureUrl = 'https://example.com/profile.jpg'; // 프로필 사진 URL
-    String email = 'user@example.com'; // 이메일
-    String nickname = 'Name'; // 닉네임
-
-    // 친구 임시 데이터
-    final List<Map<String, String>> friends = [
-      {'nickname': 'Drew', 'email': 'friend1@example.com'},
-      {'nickname': 'young인', 'email': 'friend2@example.com'},
-      {'nickname': '쩡25', 'email': 'friend3@example.com'},
-      {'nickname': '석규**', 'email': 'friend4@example.com'},
-    ];
-
     return Scaffold(
       appBar: AppBar(title: const Text('My Page')),
       body: Padding(
         padding: const EdgeInsets.all(16.0), // 전체 여백 설정
         child: Column(
           children: [
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -59,7 +72,13 @@ class MyPage extends StatelessWidget {
                 IconButton(
                   alignment: const Alignment(0, 0),
                   icon: const Icon(Icons.edit),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const EditProfile()),
+                    );
+                  },
                 ),
               ],
             ),

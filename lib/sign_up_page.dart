@@ -102,7 +102,7 @@ class _SignUpPageState extends State<SignUpPage> {
               TextFormField(
                 controller: _nicknameController,
                 decoration: const InputDecoration(
-                  labelText: 'Name',
+                  labelText: 'Nickname',
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.person),
                 ),
