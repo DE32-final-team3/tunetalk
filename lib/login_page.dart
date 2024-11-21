@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'find_pw.dart'; // 비밀번호 찾기 페이지
+import 'sign_up_page.dart'; // 회원가입 페이지
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -110,12 +112,25 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const FindPasswordPage(),
+                        ),
+                      );
+                    },
                     child: const Text("비밀번호 찾기"),
                   ),
                   const SizedBox(width: 20),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SignUpPage()),
+                      );
+                    },
                     child: const Text("회원가입"),
                   ),
                 ],
