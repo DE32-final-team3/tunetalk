@@ -42,6 +42,31 @@ class _SignUpPageState extends State<SignUpPage> {
     return null;
   }
 
+  // 비밀번호 유효성 검사
+  String? _validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return '비밀번호를 입력해주세요.';
+    }
+    if (value.length < 8 || value.length > 16) {
+      return '비밀번호는 8자 이상 16자 이하이어야 합니다';
+    }
+
+    // 정규식으로 각 조건 확인
+    bool hasLetter = RegExp(r'[a-zA-Z]').hasMatch(value); // 영문자 포함 여부
+    bool hasDigit = RegExp(r'\d').hasMatch(value); // 숫자 포함 여부
+    bool hasSpecial =
+        RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value); // 특수문자 포함 여부
+
+    // 최소 2가지 조건 만족 여부
+    int conditionsMet =
+        (hasLetter ? 1 : 0) + (hasDigit ? 1 : 0) + (hasSpecial ? 1 : 0);
+    if (conditionsMet < 2) {
+      return '비밀번호는 영문, 숫자, 특수문자 중 최소 2가지를 포함해야 합니다';
+    }
+
+    return null; // 검증 통과
+  }
+
   // 닉네임 유효성 검사
   String? _validateNickname(String? value) {
     if (value == null || value.isEmpty) {
@@ -130,15 +155,15 @@ class _SignUpPageState extends State<SignUpPage> {
                     },
                   ),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return '비밀번호를 입력해주세요.';
-                  }
-                  if (value.length < 6) {
-                    return '비밀번호는 최소 6자 이상이어야 합니다.';
-                  }
-                  return null;
-                },
+                validator: _validatePassword, //(value) {
+                //   if (value == null || value.isEmpty) {
+                //     return '비밀번호를 입력해주세요.';
+                //   }
+                //   if (value.length < 6) {
+                //     return '비밀번호는 최소 6자 이상이어야 합니다.';
+                //   }
+                //   return null;
+                // },
               ),
               const SizedBox(height: 16),
               // 비밀번호 확인 입력

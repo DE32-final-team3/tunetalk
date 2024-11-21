@@ -34,9 +34,10 @@ class _LoginPageState extends State<LoginPage> {
       return '비밀번호를 입력해주세요';
     }
 
-    if (value.length < 6) {
-      return '6자리 이상 입력해주세요';
+    if (value.length < 8 || value.length > 16) {
+      return '비밀번호는 8자 이상 16자 이하이어야 합니다';
     }
+
     return null;
   }
 
