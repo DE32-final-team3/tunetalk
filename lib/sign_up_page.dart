@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tunetalk/login_page.dart';
+import 'login_page.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -93,10 +93,7 @@ class _SignUpPageState extends State<SignUpPage> {
         const SnackBar(content: Text('회원가입 성공')),
       );
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginPage()),
-      );
+      Navigator.pop(context);
     }
   }
 
