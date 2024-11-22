@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tunetalk/login_page.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -92,11 +93,10 @@ class _SignUpPageState extends State<SignUpPage> {
         const SnackBar(content: Text('회원가입 성공')),
       );
 
-      // 모든 입력 필드 초기화
-      _emailController.clear();
-      _passwordController.clear();
-      _confirmPasswordController.clear();
-      _nicknameController.clear();
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+      );
     }
   }
 
@@ -155,15 +155,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     },
                   ),
                 ),
-                validator: _validatePassword, //(value) {
-                //   if (value == null || value.isEmpty) {
-                //     return '비밀번호를 입력해주세요.';
-                //   }
-                //   if (value.length < 6) {
-                //     return '비밀번호는 최소 6자 이상이어야 합니다.';
-                //   }
-                //   return null;
-                // },
+                validator: _validatePassword,
               ),
               const SizedBox(height: 16),
               // 비밀번호 확인 입력
