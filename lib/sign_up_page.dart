@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -14,29 +13,86 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final _emailController = TextEditingController();
+  final _nicknameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  final _nicknameController = TextEditingController();
 
   bool _passwordVisible = false;
   bool _confirmPasswordVisible = false;
 
+  bool _isEmailChecked = false;
+  bool _isNicknameChecked = false;
+
   final _formKey = GlobalKey<FormState>();
 
-  // 이메일 유효성 검사
-  String? _validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return '이메일을 입력해주세요.';
+  void _validateEmail() {
+    final email = _emailController.text;
+
+    if (email.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('이메일을 입력해주세요.'),
+            duration: Duration(milliseconds: 500)),
+      );
+      return;
     }
+
     String pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
     RegExp regExp = RegExp(pattern);
-    if (!regExp.hasMatch(value)) {
-      return '유효한 이메일 형식을 입력해주세요.';
+    if (!regExp.hasMatch(email)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('유효한 이메일 형식을 입력해주세요.'),
+            duration: Duration(milliseconds: 500)),
+      );
+      return;
     }
-    //if (_existingEmails.contains(value)) {
-    //  return '이미 사용 중인 이메일입니다.';
-    //}
-    return null;
+
+    // API 호출 코드 필요
+    // statusCode == 200 일 경우
+    // setState((){
+    //   _isEmailChecked = true;
+    // });
+    // return "사용 가능한 이메일입니다";
+    // // statusCode != 200 일 경우
+    // setState(() {
+    //   _isEmailChecked=false;
+    // });
+    // return "이미 사용 중인 이메일입니다";
+
+    setState(() {
+      _isEmailChecked = true;
+    });
+
+    return;
+  }
+
+  void _validateNickname() {
+    final nickname = _nicknameController.text;
+
+    if (nickname.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('닉네임을 입력해주세요'),
+            duration: Duration(milliseconds: 500)),
+      );
+      return;
+    }
+
+    if (nickname.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('닉네임에는 공백만 입력할 수 없습니다'),
+            duration: Duration(milliseconds: 500)),
+      );
+      return;
+    }
+
+    // API 호출 코드 필요
+    setState(() {
+      _isNicknameChecked = true;
+    });
+    return;
   }
 
   // 비밀번호 유효성 검사
@@ -64,41 +120,6 @@ class _SignUpPageState extends State<SignUpPage> {
     return null; // 검증 통과
   }
 
-  // 닉네임 유효성 검사
-  String? _validateNickname(String? value) {
-    if (value == null || value.isEmpty) {
-      return '닉네임을 입력해주세요.';
-    }
-    if (value.trim().isEmpty) {
-      return '닉네임에 공백만 입력할 수 없습니다.';
-    }
-    //if (_existingNicknames.contains(value.trim())) {
-    //  return '이미 사용 중인 닉네임입니다.';
-    //}
-    return null;
-  }
-
-  Future<int> _api(String path, Map<String, dynamic> params) async {
-    String? serverIP = dotenv.env['SERVER_IP']!;
-
-    var url = Uri.http(
-      serverIP, // 호스트 주소
-      '/api/user/$path', // 경로
-      //params.map((key, value) => MapEntry(key, value.toString())),
-    );
-
-    var body =
-        jsonEncode(params.map((key, value) => MapEntry(key, value.toString())));
-    var response = await http.post(
-      url,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: body,
-    );
-    return response.statusCode;
-  }
-
   // 회원가입 처리 함수
   void _signUp() async {
     if (_formKey.currentState!.validate()) {
@@ -106,25 +127,10 @@ class _SignUpPageState extends State<SignUpPage> {
       final nickname = _nicknameController.text;
       final password = _passwordController.text;
 
-      var params = {
-        'email': email.toString(),
-        'nickname': nickname.toString(),
-        'password': password.toString()
-      };
-
-      var api = await _api("create", params);
-      if (api == 200) {
-        // 성공적으로 회원가입 처리 완료
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('회원가입 성공')),
-        );
-
-        Navigator.pop(context);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('회원가입 실패')),
-        );
-      }
+      _emailController.clear();
+      _nicknameController.clear();
+      _passwordController.clear();
+      _confirmPasswordController.clear();
     }
   }
 
@@ -140,27 +146,67 @@ class _SignUpPageState extends State<SignUpPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // 이메일 입력
-              TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.email),
-                ),
-                keyboardType: TextInputType.emailAddress,
-                validator: _validateEmail,
+              Row(
+                children: [
+                  Expanded(
+                      child: TextFormField(
+                    controller: _emailController,
+                    decoration: const InputDecoration(
+                      labelText: 'Email',
+                      border: OutlineInputBorder(),
+                      prefixIcon: Icon(Icons.email),
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        _isEmailChecked = false;
+                      });
+                    },
+                    keyboardType: TextInputType.emailAddress,
+                  )),
+                  const SizedBox(width: 8),
+                  ElevatedButton(
+                    onPressed: () {
+                      _validateEmail();
+                    }, //_checkEmail,
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                    ),
+                    child: const Text('중복 체크'),
+                  ),
+                ],
               ),
+
               const SizedBox(height: 16),
-              // 닉네임 입력
-              TextFormField(
-                controller: _nicknameController,
-                decoration: const InputDecoration(
-                  labelText: 'Nickname',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.person),
-                ),
-                validator: _validateNickname,
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: _nicknameController,
+                      decoration: const InputDecoration(
+                        labelText: 'Nickname',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.person),
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          _isNicknameChecked = false;
+                        });
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  ElevatedButton(
+                    onPressed: () {
+                      _validateNickname();
+                    }, //  _checkNickname,
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                    ),
+                    child: const Text("중복 체크"),
+                  )
+                ],
               ),
+
               const SizedBox(height: 16),
               // 비밀번호 입력
               TextFormField(
@@ -220,7 +266,8 @@ class _SignUpPageState extends State<SignUpPage> {
               const SizedBox(height: 16),
               // 회원가입 버튼
               ElevatedButton(
-                onPressed: _signUp,
+                onPressed: // 이메일, 닉네임 중복 체크 완료 후 회원가입 버튼 활성화
+                    _isEmailChecked && _isNicknameChecked ? _signUp : null,
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 50), // 버튼의 크기 설정
                 ),
