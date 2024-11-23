@@ -43,20 +43,46 @@ class _LoginPageState extends State<LoginPage> {
     return null;
   }
 
-  Future<int> _login_api(String email, String password) async {
-    String? serverIP = dotenv.env['SERVER_IP']!;
+  // Future<int> _login_api(String email, String password) async {
+  //   String? serverIP = dotenv.env['SERVER_IP']!;
 
-    var url = Uri.http(
-      serverIP, // 호스트 주소
-      '/api/user/login', // 경로
-      {'email': email, 'password': password}, // 쿼리 파라미터
-    );
+  //   var url = Uri.http(
+  //     serverIP, // 호스트 주소
+  //     '/api/user/login', // 경로
+  //     {'email': email, 'password': password}, // 쿼리 파라미터
+  //   );
 
-    var response = await http.post(url); // POST 요청 보내기
-    return response.statusCode; // 응답의 상태 코드 반환
-  }
+  //   var response = await http.post(url); // POST 요청 보내기
+  //   return response.statusCode; // 응답의 상태 코드 반환
+  // }
 
-  void _login() async {
+  // void _login() async {
+  //   if (_formKey.currentState?.validate() ?? false) {
+  //     final email = _emailController.text;
+  //     final password = _passwordController.text;
+
+  //     if (email.isEmpty || password.isEmpty) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         const SnackBar(content: Text('이메일과 비밀번호를 입력해주세요.')),
+  //       );
+  //     } else {
+  //       var statusCode = await _login_api(email, password);
+  //       if (statusCode == 200) {
+  //         Navigator.pushReplacement(
+  //           context,
+  //           MaterialPageRoute(builder: (context) => Meterial()),
+  //         );
+  //       } else {
+  //         ScaffoldMessenger.of(context).showSnackBar(
+  //           const SnackBar(content: Text('로그인 실패')),
+  //         );
+  //       }
+  //     }
+  //   }
+  // }
+
+  // 서버 없을 때
+  void _login() {
     if (_formKey.currentState?.validate() ?? false) {
       final email = _emailController.text;
       final password = _passwordController.text;
@@ -66,17 +92,10 @@ class _LoginPageState extends State<LoginPage> {
           const SnackBar(content: Text('이메일과 비밀번호를 입력해주세요.')),
         );
       } else {
-        var statusCode = await _login_api(email, password);
-        if (statusCode == 200) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => Meterial()),
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('로그인 실패')),
-          );
-        }
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => Meterial()),
+        );
       }
     }
   }
