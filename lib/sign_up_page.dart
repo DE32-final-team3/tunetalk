@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'login_page.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -18,14 +22,6 @@ class _SignUpPageState extends State<SignUpPage> {
   bool _confirmPasswordVisible = false;
 
   final _formKey = GlobalKey<FormState>();
-
-  // 이미 사용 중인 이메일 및 닉네임 목록 (예시)
-  //final List<String> _existingEmails = [
-  //  'test@example.com',
-  //  'user@example.com',
-  //  'admin@example.com'
-  //];
-  //final List<String> _existingNicknames = ['user1', 'admin', 'example_user'];
 
   // 이메일 유효성 검사
   String? _validateEmail(String? value) {
@@ -82,18 +78,53 @@ class _SignUpPageState extends State<SignUpPage> {
     return null;
   }
 
+  Future<int> _api(String path, Map<String, dynamic> params) async {
+    String? serverIP = dotenv.env['SERVER_IP']!;
+
+    var url = Uri.http(
+      serverIP, // 호스트 주소
+      '/api/user/$path', // 경로
+      //params.map((key, value) => MapEntry(key, value.toString())),
+    );
+
+    var body =
+        jsonEncode(params.map((key, value) => MapEntry(key, value.toString())));
+    var response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: body,
+    );
+    return response.statusCode;
+  }
+
   // 회원가입 처리 함수
-  void _signUp() {
+  void _signUp() async {
     if (_formKey.currentState!.validate()) {
-      //final email = _emailController.text;
-      //final nickname = _nicknameController.text;
+      final email = _emailController.text;
+      final nickname = _nicknameController.text;
+      final password = _passwordController.text;
 
-      // 성공적으로 회원가입 처리 완료
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('회원가입 성공')),
-      );
+      var params = {
+        'email': email.toString(),
+        'nickname': nickname.toString(),
+        'password': password.toString()
+      };
 
-      Navigator.pop(context);
+      var api = await _api("create", params);
+      if (api == 200) {
+        // 성공적으로 회원가입 처리 완료
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('회원가입 성공')),
+        );
+
+        Navigator.pop(context);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('회원가입 실패')),
+        );
+      }
     }
   }
 
