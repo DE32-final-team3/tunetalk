@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -10,7 +12,6 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   // 임시 데이터
-  String profilePictureUrl = 'https://example.com/profile.jpg'; // 프로필 사진 URL
   String email = 'user@example.com'; // 이메일
   String nickname = 'Name'; // 닉네임
   String password = 'password123'; // 비밀번호
@@ -18,6 +19,18 @@ class _EditProfileState extends State<EditProfile> {
 
   bool _passwordVisible = false;
   bool _confirmPasswordVisible = false;
+
+  File? _image;
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickImage(ImageSource source) async {
+    final XFile? pickedFile = await _picker.pickImage(source: source);
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
+  }
 
   String? _validateNickname(String? value) {
     if (value == null || value.isEmpty) {
@@ -47,7 +60,7 @@ class _EditProfileState extends State<EditProfile> {
       return '비밀번호는 영문, 숫자, 특수문자 중 최소 2가지를 포함해야 합니다';
     }
 
-    return null; // 검증 통과
+    return null;
   }
 
   String? _validateConfirmPassword(String? value) {
@@ -58,13 +71,6 @@ class _EditProfileState extends State<EditProfile> {
       return '비밀번호가 일치하지 않습니다';
     }
     return null;
-  }
-
-  // 프로필 사진 변경
-  void _changeProfilePicture() {
-    setState(() {
-      profilePictureUrl = 'https://example.com/new-profile.jpg'; // 임시 URL로 변경
-    });
   }
 
   @override
@@ -95,12 +101,12 @@ class _EditProfileState extends State<EditProfile> {
                 children: [
                   CircleAvatar(
                     radius: 70, // 원형의 반지름
-                    backgroundImage: NetworkImage(profilePictureUrl),
+                    backgroundImage: _image != null ? FileImage(_image!) : null,
                   ),
                   const SizedBox(height: 10), // 프로필 사진과 버튼 사이 여백
                   ElevatedButton(
-                    onPressed: _changeProfilePicture,
-                    child: const Text('프로필 사진 편집'),
+                    onPressed: () => _pickImage(ImageSource.gallery),
+                    child: const Text('프로필 사진 변경'),
                   ),
                 ],
               ),
@@ -198,7 +204,6 @@ class _EditProfileState extends State<EditProfile> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('수정이 완료되었습니다.')),
                           );
-                          Navigator.pop(context);
                         }
                       },
                       child: const Text('Save'),
