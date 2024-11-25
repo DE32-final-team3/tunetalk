@@ -74,7 +74,7 @@ class _RequestPageState extends State<RequestPage> {
                   itemCount: 15, // 15개 항목을 리스트로 보여주기
                   itemBuilder: (context, index) {
                     return Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(16.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -168,53 +168,63 @@ class UserRequestWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+      child: Column(
         children: [
-          const SizedBox(width: 20),
-          CircleAvatar(
-            radius: 20,
-            backgroundImage: NetworkImage(profileImage),
-          ),
-          const SizedBox(width: 10),
-          Text(
-            nickname,
-            style: const TextStyle(
-              fontSize: 15, // 글씨 크기 키우기
-              fontWeight: FontWeight.bold, // 볼드체로 설정
-            ),
-          ),
-          const SizedBox(width: 10),
-          // Playlist 버튼 추가
-          Container(
-            //width: 300, // 버튼 가로 길이 설정
-            //height: 40, // 버튼 세로 길이 설정
-            decoration: BoxDecoration(
-              color: Colors.blue, // 배경 색
-              borderRadius: BorderRadius.circular(8), // 둥근 모서리
-            ),
-            child: TextButton(
-              onPressed: onPlaylist, // Playlist 버튼 클릭 시 팝업
-              child: const Text(
-                'Playlist', // 버튼 텍스트
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
+          Row(
+            children: [
+              CircleAvatar(
+                radius: 20,
+                backgroundImage: NetworkImage(profileImage),
+              ),
+              const SizedBox(width: 10),
+              Text(
+                nickname,
+                style: const TextStyle(
+                  fontSize: 20, // 글씨 크기 키우기
+                  fontWeight: FontWeight.bold, // 볼드체로 설정
                 ),
               ),
-            ),
+              const Spacer(),
+              Expanded(
+                child: TextButton(
+                  onPressed: onPlaylist, // Playlist 버튼 클릭 시 팝업
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.blue, // 버튼 배경 색상
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8), // 둥근 모서리
+                    ),
+                  ),
+                  child: const Text(
+                    'Playlist', // 버튼 텍스트
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(width: 10),
-          ElevatedButton(
-            onPressed: onAccept, // Accept 버튼 클릭 시 ChatRoomPage로 이동
-            child: const Text('Accept'),
-          ),
-          const SizedBox(width: 10),
-          ElevatedButton(
-            onPressed: onReject, // Reject 버튼 클릭 시 요청 삭제
-            child: const Text('Reject'),
-          ),
-          const SizedBox(width: 10)
+          const SizedBox(height: 5),
+          Row(
+            children: [
+              const SizedBox(width: 10),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: onAccept, // Accept 버튼 클릭 시 ChatRoomPage로 이동
+                  child: const Text('Accept'),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: onReject, // Reject 버튼 클릭 시 요청 삭제
+                  child: const Text('Reject'),
+                ),
+              ),
+            ],
+          )
         ],
       ),
     );
