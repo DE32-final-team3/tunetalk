@@ -25,7 +25,42 @@ class _SignUpPageState extends State<SignUpPage> {
 
   final _formKey = GlobalKey<FormState>();
 
-  void _validateEmail() {
+  // body로 parameter 넘기는 api
+  Future<int> _api_b(Map<String, dynamic> params) async {
+    String? serverIP = dotenv.env['SERVER_IP']!;
+
+    var url = Uri.http(
+      serverIP, // 호스트 주소
+      '/api/user/create', // 경로
+    );
+
+    var response = await http.post(
+      url,
+      headers: {
+        'accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: jsonEncode(params),
+      encoding: Encoding.getByName('utf-8'),
+    ); // POST 요청 보내기
+    return response.statusCode; // 응답의 상태 코드 반환
+  }
+
+  // url parameter로 넘기는 api
+  Future<int> _api_p(String param, String value) async {
+    String? serverIP = dotenv.env['SERVER_IP']!;
+
+    var url = Uri.http(
+      serverIP, // 호스트 주소
+      '/api/user/email', // 경로
+      {param: value},
+    );
+
+    var response = await http.post(url);
+    return response.statusCode;
+  }
+
+  void _validateEmail() async {
     final email = _emailController.text;
 
     if (email.isEmpty) {
@@ -48,26 +83,31 @@ class _SignUpPageState extends State<SignUpPage> {
       return;
     }
 
-    // API 호출 코드 필요
-    // statusCode == 200 일 경우
-    // setState((){
-    //   _isEmailChecked = true;
-    // });
-    // return "사용 가능한 이메일입니다";
-    // // statusCode != 200 일 경우
-    // setState(() {
-    //   _isEmailChecked=false;
-    // });
-    // return "이미 사용 중인 이메일입니다";
-
-    setState(() {
-      _isEmailChecked = true;
-    });
-
+    // API 호출 코드
+    var statusCode = await _api_p("email", email);
+    if (statusCode == 200) {
+      setState(() {
+        _isEmailChecked = true;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('사용 가능한 이메일입니다'),
+            duration: Duration(milliseconds: 500)),
+      );
+    } else {
+      setState(() {
+        _isEmailChecked = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text("이미 사용 중인 이메일입니다."),
+            duration: Duration(milliseconds: 500)),
+      );
+    }
     return;
   }
 
-  void _validateNickname() {
+  void _validateNickname() async {
     final nickname = _nicknameController.text;
 
     if (nickname.isEmpty) {
@@ -87,11 +127,27 @@ class _SignUpPageState extends State<SignUpPage> {
       );
       return;
     }
-
-    // API 호출 코드 필요
-    setState(() {
-      _isNicknameChecked = true;
-    });
+// API 호출 코드
+    var statusCode = await _api_p("nickname", nickname);
+    if (statusCode == 200) {
+      setState(() {
+        _isNicknameChecked = true;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('사용 가능한 닉네임입니다'),
+            duration: Duration(milliseconds: 500)),
+      );
+    } else {
+      setState(() {
+        _isNicknameChecked = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text("이미 사용 중인 닉네임입니다."),
+            duration: Duration(milliseconds: 500)),
+      );
+    }
     return;
   }
 
@@ -127,10 +183,29 @@ class _SignUpPageState extends State<SignUpPage> {
       final nickname = _nicknameController.text;
       final password = _passwordController.text;
 
-      _emailController.clear();
-      _nicknameController.clear();
-      _passwordController.clear();
-      _confirmPasswordController.clear();
+      Map<String, dynamic> params = {
+        'ID': '',
+        'email': email,
+        'nickname': nickname,
+        'password': password
+      };
+
+      var statusCode = await _api_b(params);
+      if (statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text("회원가입 완료"), duration: Duration(milliseconds: 500)),
+        );
+        _emailController.clear();
+        _nicknameController.clear();
+        _passwordController.clear();
+        _confirmPasswordController.clear();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text("회원가입 실패"), duration: Duration(milliseconds: 500)),
+        );
+      }
     }
   }
 
