@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'dart:convert';
+import 'api/user_api.dart';
 
 // page
 import 'find_pw.dart';
@@ -21,9 +18,6 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _passwordVisible = false; // 비밀번호 가시성 상태 관리
-
-  // flutter_secure_storage 객체 생성
-  final storage = FlutterSecureStorage();
 
   // 이메일 유효성 검사
   String? _validateEmail(String? value) {
@@ -50,29 +44,6 @@ class _LoginPageState extends State<LoginPage> {
     return null;
   }
 
-  Future<Map<String, dynamic>> _login_api(String email, String password) async {
-    String? serverIP = dotenv.env['SERVER_IP']!;
-
-    var url = Uri.http(
-      serverIP, // 호스트 주소
-      '/api/user/login', // 경로
-    );
-
-    var response = await http.post(
-      url,
-      headers: {'Content-type': 'application/x-www-form-urlencoded'},
-      body: {
-        'username': email,
-        'password': password,
-      },
-      encoding: Encoding.getByName('utf-8'),
-    ); // POST 요청 보내기
-    return {
-      'statusCode': response.statusCode,
-      'body': jsonDecode(response.body)
-    }; // 응답의 상태 코드 반환
-  }
-
   void _login() async {
     if (_formKey.currentState?.validate() ?? false) {
       final email = _emailController.text;
@@ -83,24 +54,18 @@ class _LoginPageState extends State<LoginPage> {
           const SnackBar(content: Text('이메일과 비밀번호를 입력해주세요.')),
         );
       } else {
-        var response = await _login_api(email, password);
-        var statusCode = response['statusCode'];
-        var body = response['body'];
+        var response = await UserApi.loginApi(email, password);
 
-        if (statusCode == 200) {
-          String accessToken = body['access_token'];
-          await storage.write(key: 'access_token', value: accessToken);
-
+        if (response) {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => Meterial()),
           );
         } else {
-          // 실패 시 에러 메시지 표시
-          String errorMessage = body['message'] ?? '로그인 실패';
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(errorMessage)),
+            const SnackBar(content: Text("이메일 또는 비밀번호가 일치하지 않습니다.")),
           );
+          _passwordController.clear();
         }
       }
     }
