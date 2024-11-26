@@ -5,13 +5,9 @@ import 'package:http/http.dart' as http;
 class Auth {
   static const _storage = FlutterSecureStorage();
 
-  // 토큰 저장된 값 읽기
-  static Future<String?> getAccessToken() async {
-    return await _storage.read(key: 'access_token');
-  }
-
   // 토큰 유효성 확인
-  static Future<bool> validateToken(String token) async {
+  static Future<bool> validateToken() async {
+    String? token = await _storage.read(key: 'access_token');
     try {
       String? serverIP = dotenv.env['SERVER_IP']!;
       var url = Uri.http(

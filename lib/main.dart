@@ -41,12 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _checkToken() async {
-    String? token = await Auth.getAccessToken();
-    bool isValid = false;
-
-    if (token != null) {
-      isValid = await Auth.validateToken(token);
-    }
+    bool isValid = await Auth.validateToken();
 
     Future.delayed(const Duration(seconds: 2), () {
       if (isValid) {
@@ -55,6 +50,7 @@ class _SplashScreenState extends State<SplashScreen> {
           MaterialPageRoute(builder: (context) => MeterialPage()),
         );
       } else {
+        Auth.clearToken();
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const LoginPage()),
