@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+// page
+import 'api/auth.dart';
 import 'login_page.dart';
+import 'meterial_page.dart';
 
 void main() async {
   await dotenv.load();
@@ -34,12 +38,38 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    _checkToken();
+  }
+
+  // Future.delayed(const Duration(seconds: 2), () {
+  //   Navigator.pushReplacement(
+  //     context,
+  //     MaterialPageRoute(builder: (context) => const LoginPage()),
+  //   );
+  // });
+
+  Future<void> _checkToken() async {
+    String? token = await Auth.getAccessToken();
+    bool isValid = false;
+    print("check token");
+
+    if (token != null) {
+      isValid = await Auth.validateToken(token);
+      print("validate Token : $isValid");
+    }
 
     Future.delayed(const Duration(seconds: 2), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginPage()),
-      );
+      if (isValid) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => MeterialPage()),
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginPage()),
+        );
+      }
     });
   }
 
