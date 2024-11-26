@@ -14,7 +14,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -41,21 +40,12 @@ class _SplashScreenState extends State<SplashScreen> {
     _checkToken();
   }
 
-  // Future.delayed(const Duration(seconds: 2), () {
-  //   Navigator.pushReplacement(
-  //     context,
-  //     MaterialPageRoute(builder: (context) => const LoginPage()),
-  //   );
-  // });
-
   Future<void> _checkToken() async {
     String? token = await Auth.getAccessToken();
     bool isValid = false;
-    print("check token");
 
     if (token != null) {
       isValid = await Auth.validateToken(token);
-      print("validate Token : $isValid");
     }
 
     Future.delayed(const Duration(seconds: 2), () {

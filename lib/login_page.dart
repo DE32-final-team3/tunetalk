@@ -17,7 +17,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _formKey = GlobalKey<FormState>(); // GlobalKey for form validation
+  final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _passwordVisible = false; // 비밀번호 가시성 상태 관리
@@ -105,25 +105,6 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
   }
-
-  // 서버 없을 때
-  // void _login() {
-  //   if (_formKey.currentState?.validate() ?? false) {
-  //     final email = _emailController.text;
-  //     final password = _passwordController.text;
-
-  //     if (email.isEmpty || password.isEmpty) {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         const SnackBar(content: Text('이메일과 비밀번호를 입력해주세요.')),
-  //       );
-  //     } else {
-  //       Navigator.pushReplacement(
-  //         context,
-  //         MaterialPageRoute(builder: (context) => Meterial()),
-  //       );
-  //     }
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {

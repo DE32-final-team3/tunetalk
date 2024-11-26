@@ -4,30 +4,15 @@ import 'edit_profile.dart';
 class MyPage extends StatefulWidget {
   const MyPage({super.key});
 
+  @override
   _MyPageState createState() => _MyPageState();
 }
 
 class _MyPageState extends State<MyPage> {
   // 임시 데이터
   String profilePictureUrl = ''; // 프로필 사진 URL
-  String email = 'user@example.com'; // 이메일
-  String nickname = 'Nickname'; // 닉네임
-
-  // 친구 임시 데이터
-  final List<Map<String, String>> friends = [
-    {'nickname': 'Drew', 'email': 'friend1@example.com'},
-    {'nickname': 'young인', 'email': 'friend2@example.com'},
-    {'nickname': '쩡25', 'email': 'friend3@example.com'},
-    {'nickname': '석규**', 'email': 'friend4@example.com'},
-    {'nickname': '석규**', 'email': 'friend4@example.com'},
-    {'nickname': '석규**', 'email': 'friend4@example.com'},
-    {'nickname': '석규**', 'email': 'friend4@example.com'},
-    {'nickname': '석규**', 'email': 'friend4@example.com'},
-    {'nickname': '석규**', 'email': 'friend4@example.com'},
-    {'nickname': '석규**', 'email': 'friend4@example.com'},
-    {'nickname': '석규**', 'email': 'friend4@example.com'},
-    {'nickname': '석규**', 'email': 'friend4@example.com'},
-  ];
+  String email = ''; // 이메일
+  String nickname = ''; // 닉네임
 
   @override
   Widget build(BuildContext context) {
@@ -81,24 +66,6 @@ class _MyPageState extends State<MyPage> {
                   },
                 ),
               ],
-            ),
-            const SizedBox(height: 20), // 프로필과 친구 리스트 사이 여백
-            // 친구 리스트
-            Expanded(
-              child: ListView.builder(
-                itemCount: friends.length,
-                itemBuilder: (context, index) {
-                  final friend = friends[index];
-                  return Card(
-                    margin: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: ListTile(
-                      title: Text(friend['nickname']!),
-                      subtitle: Text(friend['email']!),
-                      leading: const Icon(Icons.person),
-                    ),
-                  );
-                },
-              ),
             ),
           ],
         ),
