@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'edit_profile.dart';
+import 'package:tunetalk/api/user_api.dart';
 
 class MyPage extends StatefulWidget {
   const MyPage({super.key});
@@ -13,6 +16,24 @@ class _MyPageState extends State<MyPage> {
   String profilePictureUrl = ''; // 프로필 사진 URL
   String email = ''; // 이메일
   String nickname = ''; // 닉네임
+
+  void initState() {
+    super.initState();
+    _loadUserInfo();
+  }
+
+  Future<void> _loadUserInfo() async {
+    try {
+      Map<String, dynamic> user = await UserApi.userInfo();
+
+      setState(() {
+        email = user['email'];
+        nickname = user['nickname'];
+      });
+    } catch (e) {
+      print("Error loading user info: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
