@@ -51,7 +51,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
     var url = Uri.http(
       serverIP, // 호스트 주소
-      '/api/user/email', // 경로
+      '/api/user/$param', // 경로
       {param: value},
     );
 
