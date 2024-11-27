@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'Meterial/mypage.dart';
-import 'Meterial/club.dart';
-import 'Meterial/like.dart';
-import 'Meterial/playlist.dart';
-import 'Meterial/talk.dart';
+// page
+import 'package:tunetalk/meterial/mypage.dart';
+import 'package:tunetalk/meterial/club.dart';
+import 'package:tunetalk/meterial/like.dart';
+import 'package:tunetalk/meterial/playlist.dart';
+import 'package:tunetalk/meterial/talk.dart';
 
 class MeterialPage extends StatelessWidget {
   @override

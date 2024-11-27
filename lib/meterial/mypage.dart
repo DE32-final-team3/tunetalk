@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+// page
 import 'package:tunetalk/api/user_api.dart';
-
-import 'edit_profile.dart';
+import 'package:tunetalk/meterial/edit_profile.dart';
 
 class MyPage extends StatefulWidget {
   const MyPage({super.key});

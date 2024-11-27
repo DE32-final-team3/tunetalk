@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'chatroom.dart';
-import 'request.dart';
+// page
+import 'package:tunetalk/meterial/chatroom.dart';
+import 'package:tunetalk/meterial/request.dart';
 
 class Talk extends StatefulWidget {
   const Talk({super.key});

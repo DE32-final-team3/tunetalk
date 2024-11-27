@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'api/user_api.dart';
-
 // page
-import 'find_pw.dart';
-import 'sign_up_page.dart';
-import 'meterial_page.dart';
+import 'package:tunetalk/find_pw.dart';
+import 'package:tunetalk/sign_up_page.dart';
+import 'package:tunetalk/meterial_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

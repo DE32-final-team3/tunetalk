@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 // page
-import 'api/auth.dart';
-import 'login_page.dart';
-import 'meterial_page.dart';
+import 'package:tunetalk/api/auth.dart';
+import 'package:tunetalk/login_page.dart';
+import 'package:tunetalk/meterial_page.dart';
 
 void main() async {
   await dotenv.load();
