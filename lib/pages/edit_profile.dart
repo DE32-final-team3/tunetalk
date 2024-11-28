@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'dart:io';
+// page
+import 'package:tunetalk/pages/edit_profile.dart';
+import 'package:tunetalk/user_provider.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -12,7 +16,6 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   // 임시 데이터
-  String email = 'user@example.com'; // 이메일
   String nickname = 'Name'; // 닉네임
   String password = 'password123'; // 비밀번호
   String confirmPassword = 'password123'; // 비밀번호 확인
@@ -86,7 +89,7 @@ class _EditProfileState extends State<EditProfile> {
             // 이메일
             Center(
               child: Text(
-                email,
+                Provider.of<UserProvider>(context).email,
                 style: const TextStyle(
                   fontSize: 20,
                   color: Colors.indigo,

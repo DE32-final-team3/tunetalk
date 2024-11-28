@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'api/user_api.dart';
+import 'package:provider/provider.dart';
 // page
 import 'package:tunetalk/find_pw.dart';
 import 'package:tunetalk/sign_up_page.dart';
 import 'package:tunetalk/page_list.dart';
+// 상태 관리 클래스
+import 'package:tunetalk/user_provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -56,6 +59,13 @@ class _LoginPageState extends State<LoginPage> {
         var response = await UserApi.loginApi(email, password);
 
         if (response) {
+          Map<String, dynamic> user = await UserApi.userInfo();
+          final userProvider =
+              Provider.of<UserProvider>(context, listen: false);
+          userProvider.setUserId(user['id']);
+          userProvider.setUserEmail(user['email']);
+          userProvider.setUserNickname(user['nickname']);
+
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => PageList()),

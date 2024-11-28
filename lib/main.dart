@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
 // page
 import 'package:tunetalk/api/auth.dart';
 import 'package:tunetalk/login_page.dart';
 import 'package:tunetalk/page_list.dart';
+// 상태 관리 클래스
+import 'package:tunetalk/user_provider.dart';
+import 'package:tunetalk/api/user_api.dart';
 
 void main() async {
   await dotenv.load();
@@ -15,12 +19,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return ChangeNotifierProvider(
+      create: (context) => UserProvider(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const SplashScreen(),
       ),
-      home: const SplashScreen(),
     );
   }
 }
@@ -42,8 +49,14 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _checkToken() async {
     bool isValid = await Auth.validateToken();
 
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 2), () async {
       if (isValid) {
+        Map<String, dynamic> user = await UserApi.userInfo();
+        final userProvider = Provider.of<UserProvider>(context, listen: false);
+        userProvider.setUserId(user['id']);
+        userProvider.setUserEmail(user['email']);
+        userProvider.setUserNickname(user['nickname']);
+
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => PageList()),

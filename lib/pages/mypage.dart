@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 // page
-import 'package:tunetalk/api/user_api.dart';
 import 'package:tunetalk/pages/edit_profile.dart';
+import 'package:tunetalk/user_provider.dart';
 
 class MyPage extends StatefulWidget {
   const MyPage({super.key});
@@ -13,26 +14,6 @@ class MyPage extends StatefulWidget {
 class _MyPageState extends State<MyPage> {
   // 임시 데이터
   String profilePictureUrl = ''; // 프로필 사진 URL
-  String email = ''; // 이메일
-  String nickname = ''; // 닉네임
-
-  void initState() {
-    super.initState();
-    _loadUserInfo();
-  }
-
-  Future<void> _loadUserInfo() async {
-    try {
-      Map<String, dynamic> user = await UserApi.userInfo();
-
-      setState(() {
-        email = user['email'];
-        nickname = user['nickname'];
-      });
-    } catch (e) {
-      print("Error loading user info: $e");
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +47,8 @@ class _MyPageState extends State<MyPage> {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  nickname,
+                  Provider.of<UserProvider>(context)
+                      .nickname, // provider 사용해서 data load
                   style: const TextStyle(
                     fontSize: 35, // 폰트 크기
                     fontWeight: FontWeight.bold, // 볼드체
@@ -75,7 +57,7 @@ class _MyPageState extends State<MyPage> {
                 const SizedBox(height: 5), // 닉네임과 이메일 사이 여백
                 // 이메일
                 Text(
-                  email,
+                  Provider.of<UserProvider>(context).email,
                   style: const TextStyle(
                     fontSize: 18, // 폰트 크기
                     color: Colors.grey, // 이메일 텍스트 색상
