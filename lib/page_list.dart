@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 // page
-import 'package:tunetalk/meterial/mypage.dart';
-import 'package:tunetalk/meterial/club.dart';
-import 'package:tunetalk/meterial/like.dart';
-import 'package:tunetalk/meterial/playlist.dart';
-import 'package:tunetalk/meterial/talk.dart';
+import 'package:tunetalk/pages/mypage.dart';
+import 'package:tunetalk/pages/club.dart';
+import 'package:tunetalk/pages/like.dart';
+import 'package:tunetalk/pages/playlist.dart';
+import 'package:tunetalk/pages/talk.dart';
 
-class MeterialPage extends StatelessWidget {
+class PageList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: Meterial());
+    return MaterialApp(home: Pages());
   }
 }
 
-class Meterial extends StatefulWidget {
+class Pages extends StatefulWidget {
   @override
-  _MeterialState createState() => _MeterialState();
+  _PageListState createState() => _PageListState();
 }
 
-class _MeterialState extends State<Meterial> {
+class _PageListState extends State<Pages> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = const [

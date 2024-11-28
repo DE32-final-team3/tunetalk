@@ -3,7 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 // page
 import 'package:tunetalk/api/auth.dart';
 import 'package:tunetalk/login_page.dart';
-import 'package:tunetalk/meterial_page.dart';
+import 'package:tunetalk/page_list.dart';
 
 void main() async {
   await dotenv.load();
@@ -46,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (isValid) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => MeterialPage()),
+          MaterialPageRoute(builder: (context) => PageList()),
         );
       } else {
         Auth.clearToken();

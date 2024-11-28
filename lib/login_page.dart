@@ -3,7 +3,7 @@ import 'api/user_api.dart';
 // page
 import 'package:tunetalk/find_pw.dart';
 import 'package:tunetalk/sign_up_page.dart';
-import 'package:tunetalk/meterial_page.dart';
+import 'package:tunetalk/page_list.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -58,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
         if (response) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => Meterial()),
+            MaterialPageRoute(builder: (context) => PageList()),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 // page
-import 'package:tunetalk/meterial/chatroom.dart';
-import 'package:tunetalk/meterial/request.dart';
+import 'package:tunetalk/pages/chatroom.dart';
+import 'package:tunetalk/pages/request.dart';
 
 class Talk extends StatefulWidget {
   const Talk({super.key});
@@ -67,7 +67,7 @@ class _TalkState extends State<Talk> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => RequestPage(),
+                    builder: (context) => const RequestPage(),
                   ),
                 );
               },

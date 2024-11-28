@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 // page
-import 'package:tunetalk/meterial/chatroom.dart';
+import 'package:tunetalk/pages/chatroom.dart';
 
 class Request {
   final String profileImage;
